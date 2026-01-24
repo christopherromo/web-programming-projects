@@ -1,0 +1,23 @@
+.center {
+  margin-bottom: 25px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.link {
+  background-color: white;
+  border-color: white;
+  border-style: outset;
+  display: inline;
+  padding: 5px;
+}
+
+.page {
+  background-color: #303030;
+}
+
+.text {
+  color: white;
+  text-align: center;
+  margin-top: 50px;
+}
