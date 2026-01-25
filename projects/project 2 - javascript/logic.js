@@ -9,61 +9,70 @@
 
 let globalId = 0;
 
-function updateListName(e) {
+function updateListName(event) {
   // stop page from refreshing
-  e.preventDefault();
+  event.preventDefault();
 
   // initialize variables
-  let listNameInputField = document.getElementById("listNameInputField");
-  let currentListName = document.getElementById("theListName");
+  let listNameFormInputField = document.getElementById(
+    "listNameFormInputField",
+  );
+  let listName = document.getElementById("listName");
 
   // update list name
-  currentListName.innerText = listNameInputField.value;
+  listName.innerText = listNameFormInputField.value;
 
   // clear out input field
-  listNameInputField.value = "";
+  listNameFormInputField.value = "";
 } // updateListName
 
-function addToList(e) {
+function addToList(event) {
   // stop page from refreshing
-  e.preventDefault();
+  event.preventDefault();
 
   // update global id
   globalId += 1;
 
   // initialize variables
-  let objNameInputField = document.getElementById("objNameInputField");
-  let theDiv = document.getElementById("theList");
+  let objFormInputField = document.getElementById("objFormInputField");
+  let theList = document.getElementById("theList");
   let element = document.createElement("p");
 
   // create element and append to the list
   element.id = globalId;
-  element.innerHTML = `<form action='list-maker.html' id='theObjForm${element.id}'><label><b>${objNameInputField.value} </b></label><input type='submit' value='Delete' id='submitButton${element.id}'/></form>`;
-  theDiv.append(element);
+  element.innerHTML = `<form action='index.html' id='obj${element.id}'><label><b>${objFormInputField.value} </b></label><input type='submit' value='Delete' id='objSubmitButton${element.id}'/></form>`;
+  theList.append(element);
 
   // create an eventListener for this specific object
   document
-    .querySelector(`#theObjForm${element.id}`)
-    .addEventListener("submit", (e) => {
-      deleteFromList(e, element.id);
+    .querySelector(`#obj${element.id}`)
+    .addEventListener("submit", (event) => {
+      deleteFromList(event, element.id);
     });
 
   // clear out input field
-  objNameInputField.value = "";
+  objFormInputField.value = "";
 } // addToList
 
-function deleteFromList(e, id) {
+function deleteFromList(event, id) {
   // stop page from refreshing
-  e.preventDefault();
+  event.preventDefault();
 
   // find element based on id and remove it
   let element = document.getElementById(id);
+
+  // remove the event listener
+  const form = document.getElementById(`obj${id}`);
+  if (form) {
+    form.removeEventListener("submit", deleteFromList);
+  }
+
   element.remove();
 } // deleteFromList
 
-function updateBackground(e) {
+function updateBackground(event) {
   // stop page from refreshing
-  e.preventDefault();
+  event.preventDefault();
 
   // if statement to determine current background color and change accordingly
   if (document.body.style.backgroundColor == "darkblue") {
@@ -78,11 +87,11 @@ function main() {
 
   // updates the list title
   document
-    .querySelector("#theListNameForm")
+    .querySelector("#listNameForm")
     .addEventListener("submit", updateListName);
 
   // adds an object to the list
-  document.querySelector("#theObjForm").addEventListener("submit", addToList);
+  document.querySelector("#objForm").addEventListener("submit", addToList);
 
   // updates the background
   document
