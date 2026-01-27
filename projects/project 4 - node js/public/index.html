@@ -1,36 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
-    <head>
-        <!-- Christopher Romo, 2/24/2025, CS 3110, Project 4 -->
-        <title>christopher's server</title>
-        <meta charset="UTF-8">
-        <link href="/styles/styles.css" rel="stylesheet">
-    </head>
-    <body class="page">
-        <section class="text">
-            <h1>christopher's server</h1>
-            <p>Welcome to iklafari.mooo.com!</p>
-        </section>
-        <section class="text">
-            <h3>Please enter info here:</h3>
-            <form action="/api" method="POST">
-                <label for="Name">Name:</label>
-                <input name="Name" id="Name">
-		<p></p>
-                <label for="Email">Email:</label>
-                <input name="Email" id="Email">
-		<p></p>
-                <input type="submit">
-            </form>
-        </section>
-	<section class="center">
-		<h3 class="text">Interact with the API!<h3>
-		<a href="/api" class="link">All Members</a>
-		<a href="/api/user/chris" class="link">My Info</a>
-	</section>
-        <section class="text">
-            <h3>Christopher Romo, CS 3110</h3>
-        </section>
-    </body>
+  <head>
+    <!-- Christopher Romo, 2/24/2025, CS 3110, Project 4 -->
+    <title>christopher's server</title>
+    <meta charset="UTF-8" />
+    <link href="/styles/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text">christopher's server</h1>
+      <p class="text">welcome to iklafari.mooo.com</p>
+    </div>
+    <div class="container">
+      <h2 class="text">join the email list:</h2>
+      <form action="/api" method="POST">
+        <label class="text" for="name">name:</label>
+        <input id="name" name="name" />
+        <p></p>
+        <label class="text" for="email">email:</label>
+        <input id="email" name="email" />
+        <p></p>
+        <input type="submit" value="submit" />
+      </form>
+    </div>
+    <div class="container">
+      <h2 class="text">interact with the API</h2>
+      <p class="text">
+        to see all recipients: <a class="link" href="/api">/api</a>
+      </p>
+      <p class="text">to see a specific recipient: /api/recipient/ID-HERE</p>
+      <p class="text">
+        URL parameters show all matching recipients (name, email, id):
+      </p>
+      <p class="text">
+        /api?name=NAME-HERE, /api?name=NAME-HERE&id=ID-HERE, etc.
+      </p>
+    </div>
+    <div class="container">
+      <h2 class="text">christopher romo, CS 3110</h2>
+    </div>
+  </body>
 </html>
