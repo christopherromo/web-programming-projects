@@ -4,19 +4,21 @@
   text-align: center;
 }
 
-.link {
-  background-color: white;
-  border-color: white;
-  border-style: outset;
-  display: inline;
-  padding: 5px;
-}
-
 .text {
   color: white;
 }
 
+.text-box {
+  background-color: white;
+  border-color: white;
+  border-style: outset;
+  display: inline-block;
+  padding: 10px;
+  text-align: center;
+  width: 60%;
+}
+
 body {
-  background-color: #303030;
+  background-color: midnightblue;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

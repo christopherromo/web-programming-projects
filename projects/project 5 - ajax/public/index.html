@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <!-- Christopher Romo, 03/03/2025, CS 3110, Project 5 -->
+    <title>christopher's server</title>
+    <meta charset="UTF-8" />
+    <link href="/styles/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text">christopher's server</h1>
+      <p class="text">welcome to iklafari.mooo.com</p>
+      <p class="text">(now with AJAX!)</p>
+    </div>
+    <div class="container">
+      <h2 class="text">join the mailing list:</h2>
+      <form
+        onsubmit="
+          addRecipient();
+          return false;
+        "
+      >
+        <label class="text" for="name">name:</label>
+        <input id="name" name="name" />
+        <p></p>
+        <label class="text" for="email">email:</label>
+        <input id="email" name="email" />
+        <p></p>
+        <button type="submit">join</button>
+      </form>
+    </div>
+    <div class="container">
+      <div class="text-box">
+        <h3><u>all recipients</u></h3>
+        <div id="theList"></div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="text-box">
+        <h2>interact with the API</h2>
+        <p>to see all recipients: <a href="/api">/api</a></p>
+        <p>to see a specific recipient: /api/recipient/ID-HERE</p>
+        <p>URL parameters show all matching recipients (name, email, id):</p>
+        <p>/api?name=NAME-HERE, /api?name=NAME-HERE&id=ID-HERE, etc.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div>
+        <h2 class="text">christopher romo, CS 3110</h2>
+      </div>
+    </div>
+    <script src="/js/logic.js"></script>
+  </body>
+</html>

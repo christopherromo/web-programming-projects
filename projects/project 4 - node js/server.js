@@ -7,26 +7,28 @@ const url = require("url");
 const mailList = [];
 let idCounter = 0;
 
+// handles incoming requests, incoming 'req', and outgoing 'res'
 const handleRequest = (req, res) => {
   // get the url and the url parts
   const parsedUrl = url.parse(req.url, true);
-  const urlParts = parsedUrl.pathname.split("/").filter(Boolean);
+  const pathname = parsedUrl.pathname;
+  const pathParts = pathname.split("/").filter(Boolean);
 
   if (
     req.method === "GET" &&
-    (parsedUrl.pathname === "/" ||
-      parsedUrl.pathname.startsWith("/styles") ||
-      parsedUrl.pathname.startsWith("/js"))
+    (pathname === "/" ||
+      pathname.startsWith("/styles") ||
+      pathname.startsWith("/js"))
   ) {
     // static file handling
 
     // find the correct file
     let filePath;
 
-    if (parsedUrl.pathname === "/") {
+    if (pathname === "/") {
       filePath = path.join(__dirname, "public", "index.html");
     } else {
-      filePath = path.join(__dirname, "public", parsedUrl.pathname);
+      filePath = path.join(__dirname, "public", pathname);
     }
 
     // find the content type
@@ -46,16 +48,18 @@ const handleRequest = (req, res) => {
     // read the file and display
     fs.readFile(filePath, (err, data) => {
       if (err) {
+        // provide error message if file cannot be found (404 = not found)
         res.writeHead(404);
         res.end("file not found.");
         return;
       }
 
+      // return content (200 = ok)
       res.writeHead(200, { "Content-Type": contentType });
       res.end(data);
     });
-  } else if (req.method === "POST" && parsedUrl.pathname === "/api") {
-    // get the input
+  } else if (req.method === "POST" && pathname === "/api") {
+    // save request info to body
     let body = "";
     req.on("data", (data) => {
       body += data;
@@ -74,7 +78,7 @@ const handleRequest = (req, res) => {
         }
 
         if (!params.name || !params.email) {
-          // provide error message if input is incomplete
+          // provide error message if input is incomplete (400 = bad request)
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "please enter all fields." }));
           return;
@@ -84,6 +88,8 @@ const handleRequest = (req, res) => {
         idCounter += 1;
         params.id = idCounter;
         mailList.push(params);
+
+        // return a message stating recipient has been added (201 = created)
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
@@ -92,16 +98,16 @@ const handleRequest = (req, res) => {
           }),
         );
       } catch (err) {
-        // provide error message if request is invalid
+        // provide error message if request is invalid (400 = bad request)
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "invalid request format." }));
       }
     });
-  } else if (req.method === "GET" && parsedUrl.pathname === "/api") {
+  } else if (req.method === "GET" && pathname === "/api") {
     const { name, email, id } = parsedUrl.query;
 
     if (!name && !email && !id) {
-      // all entries
+      // return all recipients (200 = ok)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(mailList));
     } else {
@@ -114,36 +120,36 @@ const handleRequest = (req, res) => {
       );
 
       if (filteredList.length > 0) {
-        // return all matching recipients
+        // return all matching recipients (200 = ok)
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(filteredList));
       } else {
-        // provide error message if there are no matching recipients
+        // provide error message if there are no matching recipients (404 = not found)
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "no matching recipients found." }));
       }
     }
   } else if (
     req.method === "GET" &&
-    urlParts[0] === "api" &&
-    urlParts[1] === "recipient" &&
-    urlParts[2]
+    pathParts[0] === "api" &&
+    pathParts[1] === "recipient" &&
+    pathParts[2]
   ) {
     // get the requested id and find within the mail list
-    const id = parseInt(decodeURIComponent(urlParts[2]));
+    const id = parseInt(decodeURIComponent(pathParts[2]));
     const recipient = mailList.find((entry) => entry.id === id);
 
     if (recipient) {
-      // return the recipient with the requested id
+      // return the recipient with the requested id (200 = ok)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(recipient));
     } else {
-      // provide error message if requested id is not within the mail list
+      // provide error message if requested id is not within the mail list (404 = not found)
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "recipient not found." }));
     }
   } else {
-    // endpoint not implemented
+    // endpoint not implemented (501 = not implemented)
     res.writeHead(501, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "not implemented." }));
   }
@@ -154,5 +160,5 @@ const server = http.createServer(handleRequest);
 
 // run the server on local host 3000
 server.listen(3000, "127.0.0.1", () => {
-  console.log("Server running at http://localhost:3000");
+  console.log("server running at http://localhost:3000");
 });
