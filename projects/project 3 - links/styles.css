@@ -19,11 +19,12 @@
   padding: 5px;
 }
 
-.page {
-  background-color: #303030;
-}
-
 .text {
   color: white;
   text-align: center;
+}
+
+body {
+  background-color: #303030;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

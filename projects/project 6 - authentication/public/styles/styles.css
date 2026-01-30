@@ -1,0 +1,24 @@
+.container {
+  margin-bottom: 50px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.text {
+  color: white;
+}
+
+.text-box {
+  background-color: white;
+  border-color: white;
+  border-style: outset;
+  display: inline-block;
+  padding: 10px;
+  text-align: center;
+  width: 60%;
+}
+
+body {
+  background-color: dodgerblue;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
