@@ -6,9 +6,15 @@ const querystring = require("querystring");
 const sqlite3 = require("sqlite3");
 const url = require("url");
 
-const databasePath = path.join(__dirname, "data", "database.db");
+const databaseDirectory = path.join(__dirname, "data");
 
-// recipients database, where pairs of names and emails are stored
+if (!fs.existsSync(databaseDirectory)) {
+  fs.mkdirSync(databaseDirectory, { recursive: true });
+}
+
+const databasePath = path.join(databaseDirectory, "database.db");
+
+// create the database and the functions for accessing the recipients and accounts tables
 const database = new sqlite3.Database(databasePath);
 
 let recipients = {};

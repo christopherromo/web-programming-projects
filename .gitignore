@@ -13,16 +13,3 @@ yarn-error.log*
 *.sqlite
 *.sqlite3
 *.db
-
-# OS junk
-.DS_Store
-Thumbs.db
-
-# Editor / IDE settings
-.vscode/
-.idea/
-
-# Coverage / build artifacts
-coverage/
-dist/
-build/
