@@ -5,7 +5,7 @@ const path = require("path");
 const querystring = require("querystring");
 const url = require("url");
 
-const dbPath = path.join(__dirname, "src", "db", "passwd.db");
+const dbPath = path.join(__dirname, "data", "passwd.txt");
 const mailList = [];
 let idCounter = 0;
 let accounts;
@@ -55,7 +55,11 @@ const parseBasicAuthHeader = (req) => {
   }
 
   const decoded = Buffer.from(header.slice(6), "base64").toString();
-  const [username, password] = decoded.split(":");
+  const index = decoded.indexOf(":");
+  if (index === -1) return null;
+
+  const username = decoded.slice(0, index);
+  const password = decoded.slice(index + 1);
 
   if (!username || !password) return null;
 
@@ -73,7 +77,6 @@ const sendUnauthorizedRequest = (res) => {
 
 // authenticates user
 const authenticateRequest = (req, res) => {
-  // p
   const account = parseBasicAuthHeader(req);
   if (!account) {
     sendUnauthorizedRequest(res);
@@ -262,7 +265,9 @@ const handleRequest = (req, res) => {
 
           // return the updated recipient (200 = ok)
           res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(recipient));
+          res.end(
+            JSON.stringify({ message: "recipient updated successfully!" }),
+          );
         } catch (err) {
           // provide an error message if the recipient cannot be updated (400 = bad request)
           res.writeHead(400, { "Content-Type": "application/json" });

@@ -171,7 +171,9 @@ const handleRequest = (req, res) => {
 
           // return the updated recipient (200 = ok)
           res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(recipient));
+          res.end(
+            JSON.stringify({ message: "recipient updated successfully!" }),
+          );
         } catch (err) {
           // provide an error message if the recipient cannot be updated (400 = bad request)
           res.writeHead(400, { "Content-Type": "application/json" });

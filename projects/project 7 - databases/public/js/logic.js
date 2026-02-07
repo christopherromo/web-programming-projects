@@ -9,7 +9,7 @@
 // fills the list on index.html
 async function fillList() {
   // fetch all recipients
-  const response = await fetch("/api");
+  const response = await fetch("/api/recipient");
   const mailList = await response.json();
 
   // designate area to append
@@ -27,9 +27,7 @@ async function fillList() {
   // for each recipient of mailList, create an entry on list
   mailList.forEach((recipient) => {
     // initialize variables
-    let recipientName = recipient.name;
-    let recipientEmail = recipient.email;
-    let recipientId = recipient.id;
+    const { id, name, email } = recipient;
     let element = document.createElement("p");
 
     // css styling
@@ -38,7 +36,7 @@ async function fillList() {
     element.style.textAlign = "center";
 
     // innerHTML for each entry
-    element.innerHTML = `<p>name: ${recipientName}</p><p>email: ${recipientEmail}</p><p>recipient id: ${recipientId}</p><p><button onclick="editRecipient('${recipientId}')">edit</button> <button onclick="deleteRecipient('${recipientId}')">remove</button></p>`;
+    element.innerHTML = `<p>name: ${name}</p><p>email: ${email}</p><p>recipient id: ${id}</p><p><button onclick="editRecipient('${id}')">edit</button> <button onclick="deleteRecipient('${id}')">remove</button></p>`;
 
     // append element to DOM
     theList.append(element);
@@ -48,8 +46,8 @@ async function fillList() {
 // updates a recipient in the mailing list
 async function editRecipient(id) {
   // fetch specified user and edit
-  const editedName = prompt("edit recipient's name (empty for no change):");
-  const editedEmail = prompt("edit recipient's email (empty for no change):");
+  const editedName = prompt("edit recipient's name:");
+  const editedEmail = prompt("edit recipient's email:");
 
   const response = await fetch(`/api/recipient/${id}`, {
     method: "PUT",
@@ -95,7 +93,7 @@ async function addRecipient() {
   const email = document.getElementById("email");
 
   // post recipient
-  const response = await fetch("/api", {
+  const response = await fetch("/api/recipient", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: name.value, email: email.value }),
@@ -115,6 +113,35 @@ async function addRecipient() {
     alert(error.error);
   }
 } // addRecipient
+
+// adds an account to the API
+async function addAccount() {
+  // specify elements on HTML
+  const username = document.getElementById("username");
+  const password = document.getElementById("password");
+
+  // post account
+  const response = await fetch("/api/account", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value,
+    }),
+  });
+
+  // add account or provide error message
+  if (response.ok) {
+    const data = await response.json();
+    alert(data.message);
+
+    username.value = "";
+    password.value = "";
+  } else {
+    const error = await response.json();
+    alert(error.error);
+  }
+} // addAccount
 
 // refresh the list on index.html
 fillList();

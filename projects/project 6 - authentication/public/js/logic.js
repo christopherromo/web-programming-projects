@@ -4,7 +4,6 @@
  * Handles logic for iklafari.mooo.com.
  *
  * Author: Christopher Romo
- * Created: 2025-03-03
  */
 
 // fills the list on index.html
@@ -39,7 +38,7 @@ async function fillList() {
     element.style.textAlign = "center";
 
     // innerHTML for each entry
-    element.innerHTML = `<p>name: ${recipientName}</p><p>email: ${recipientEmail}</p><p>recipient id: ${recipientId}</p><p><button onclick="editRecipient('${recipientId}')">edit</button> <button onclick="deleteRecipient('${recipientId}')">delete</button></p>`;
+    element.innerHTML = `<p>name: ${recipientName}</p><p>email: ${recipientEmail}</p><p>recipient id: ${recipientId}</p><p><button onclick="editRecipient('${recipientId}')">edit</button> <button onclick="deleteRecipient('${recipientId}')">remove</button></p>`;
 
     // append element to DOM
     theList.append(element);
@@ -60,7 +59,8 @@ async function editRecipient(id) {
 
   // refresh the list on index.html
   if (response.ok) {
-    alert("recipient updated successfully!");
+    const data = await response.json();
+    alert(data.message);
 
     await fillList();
   } else {
@@ -82,6 +82,9 @@ async function deleteRecipient(id) {
     alert(data.message);
 
     await fillList();
+  } else {
+    const error = await response.json();
+    alert(error.error);
   }
 } // deleteRecipient
 

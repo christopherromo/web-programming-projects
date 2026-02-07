@@ -2,17 +2,21 @@
 
 <html lang="en">
   <head>
-    <!-- Christopher Romo, CS 3110, Project 6 -->
+    <!-- Christopher Romo, CS 3110, Project 7 -->
     <title>christopher's server</title>
     <meta charset="UTF-8" />
     <link href="/styles/styles.css" rel="stylesheet" />
   </head>
   <body>
+    <nav class="top-nav">
+      <a class="top-nav-item" style="color: black" href="register.html"
+        >register</a
+      >
+    </nav>
     <div class="container">
       <h1 class="text">christopher's server</h1>
       <p class="text">welcome to iklafari.mooo.com</p>
-      <p class="text">(now with authentication!)</p>
-      <p class="text">username: admin password: hello</p>
+      <p class="text">(now with a database!)</p>
     </div>
     <div class="container">
       <h2 class="text">join the mailing list:</h2>
@@ -40,10 +44,11 @@
     <div class="container">
       <div class="text-box">
         <h2>interact with the API</h2>
-        <p>to see all recipients: <a href="/api">/api</a></p>
+        <p>api landing page: <a href="/api">/api</a></p>
+        <p>
+          to see all recipients: <a href="/api/recipient">/api/recipient</a>
+        </p>
         <p>to see a specific recipient: /api/recipient/ID-HERE</p>
-        <p>URL parameters show all matching recipients (name, email, id):</p>
-        <p>/api?name=NAME-HERE, /api?name=NAME-HERE&id=ID-HERE, etc.</p>
         <p>must be authenticated to add, edit, or remove recipients</p>
       </div>
     </div>
