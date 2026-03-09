@@ -10,8 +10,9 @@ const mailList = [];
 let idCounter = 0;
 let accounts;
 
-// read the database file and populate users
 fs.readFile(dbPath, "utf8", (err, data) => {
+  // reads the database file and populate users.
+
   if (err) {
     console.error("database not found.", err);
     return;
@@ -24,12 +25,13 @@ fs.readFile(dbPath, "utf8", (err, data) => {
   }
 });
 
-// create a hash of the password passed in
+// creates a hash of the password passed in.
 const hashPassword = (password) =>
   crypto.createHash("sha256").update(password).digest("hex");
 
-// verify the login
 const verifyLogin = (username, password) => {
+  // verifies the login.
+
   if (!username || !password || !accounts || !accounts[username]) {
     return false;
   }
@@ -47,8 +49,9 @@ const verifyLogin = (username, password) => {
   );
 };
 
-// parse the authorization header
 const parseBasicAuthHeader = (req) => {
+  // parses the authorization header.
+
   const header = req.headers.authorization;
   if (!header || !header.startsWith("Basic ")) {
     return null;
@@ -66,8 +69,9 @@ const parseBasicAuthHeader = (req) => {
   return [username, password];
 };
 
-// provide error message stating the user couldn't be authenticated
 const sendUnauthorizedRequest = (res) => {
+  // provides an error message stating the user couldn't be authenticated.
+
   res.writeHead(401, {
     "WWW-Authenticate": 'Basic realm="project6-authentication"',
     "Content-Type": "application/json",
@@ -75,8 +79,9 @@ const sendUnauthorizedRequest = (res) => {
   res.end(JSON.stringify({ error: "we couldn't authenticate you." }));
 };
 
-// authenticates user
 const authenticateRequest = (req, res) => {
+  // authenticates user.
+
   const account = parseBasicAuthHeader(req);
   if (!account) {
     sendUnauthorizedRequest(res);
@@ -93,8 +98,9 @@ const authenticateRequest = (req, res) => {
   return username;
 };
 
-// handles incoming requests, incoming 'req', and outgoing 'res'
 const handleRequest = (req, res) => {
+  // handles incoming requests and sends response.
+
   // get the url and the url parts
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -103,10 +109,11 @@ const handleRequest = (req, res) => {
   if (
     req.method === "GET" &&
     (pathname === "/" ||
+      pathname.startsWith("/js") ||
       pathname.startsWith("/styles") ||
-      pathname.startsWith("/js"))
+      pathname.endsWith(".html"))
   ) {
-    // static file handling
+    // static file handling.
 
     // find the correct file
     let filePath;
@@ -117,19 +124,7 @@ const handleRequest = (req, res) => {
       filePath = path.join(__dirname, "public", pathname);
     }
 
-    // find the content type
-    const ext = path.extname(filePath);
-    let contentType;
-
-    if (ext === ".html") {
-      contentType = "text/html";
-    } else if (ext === ".css") {
-      contentType = "text/css";
-    } else if (ext === ".js") {
-      contentType = "text/javascript";
-    } else {
-      contentType = "application/octet-stream";
-    }
+    filePath = path.normalize(filePath);
 
     // read the file and display
     fs.readFile(filePath, (err, data) => {
@@ -140,12 +135,25 @@ const handleRequest = (req, res) => {
         return;
       }
 
+      // find the content type
+      const ext = path.extname(filePath).toLowerCase();
+      const mimeTypes = {
+        ".html": "text/html",
+        ".css": "text/css",
+        ".js": "text/javascript",
+      };
+
+      const contentType = mimeTypes[ext] || "application/octet-stream";
+
       // return content (200 = ok)
       res.writeHead(200, { "Content-Type": contentType });
       res.end(data);
     });
+    return;
   } else if (pathname === "/api") {
     if (req.method === "GET") {
+      // gets all recipients from the mail list, or filters the mail list based on URL parameters.
+
       const { name, email, id } = parsedUrl.query;
 
       if (!name && !email && !id) {
@@ -153,7 +161,7 @@ const handleRequest = (req, res) => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(mailList));
       } else {
-        // filters list if URL parameters are present
+        // filter list if URL parameters are present
         const filteredList = mailList.filter(
           (entry) =>
             (name && entry.name === name) ||
@@ -172,6 +180,8 @@ const handleRequest = (req, res) => {
         }
       }
     } else if (req.method === "POST") {
+      // posts recipient to the mail list.
+
       // authenticate the user
       const username = authenticateRequest(req, res);
       if (!username) return;
@@ -240,10 +250,14 @@ const handleRequest = (req, res) => {
     }
 
     if (req.method === "GET") {
+      // gets specific recipient from the mail list.
+
       // return the recipient with the requested id (200 = ok)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(recipient));
     } else if (req.method === "PUT") {
+      // updates recipient within the mail list.
+
       // authenticate the user
       const username = authenticateRequest(req, res);
       if (!username) return;
@@ -275,6 +289,8 @@ const handleRequest = (req, res) => {
         }
       });
     } else if (req.method === "DELETE") {
+      // removes recipient from the mail list.
+
       // authenticate the user
       const username = authenticateRequest(req, res);
       if (!username) return;

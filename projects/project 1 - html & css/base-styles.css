@@ -1,0 +1,41 @@
+.container {
+  display: grid;
+  margin: auto;
+  padding: 10px;
+  place-items: center;
+}
+
+.header {
+  text-align: center;
+}
+
+.image {
+  margin-bottom: 50px;
+  margin-top: 50px;
+  width: 100px;
+}
+
+.intro-box {
+  background-color: gold;
+  border-color: gold;
+  border-style: outset;
+  padding: 10px;
+  width: 80%;
+}
+
+.middle-box {
+  background-color: gainsboro;
+  border-color: gainsboro;
+  border-style: outset;
+  padding: 10px;
+  width: 80%;
+}
+
+h3 {
+  border-bottom: 5px double gold;
+  width: 81%;
+}
+
+li {
+  margin-bottom: 10px;
+}

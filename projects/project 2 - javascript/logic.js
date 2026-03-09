@@ -1,80 +1,92 @@
 /**
  * logic.js
  *
- * Handles list maker logic.
+ * handles list maker logic.
  *
- * Author: Christopher Romo
- * Created: 2025-02-10
+ * author: christopher romo
+ * created: 2025-02-10
  */
 
 let globalId = 0;
 
 function updateListName(event) {
+  // updates the list name
+
   // stop page from refreshing
   event.preventDefault();
 
-  // initialize variables
   let listNameFormInputField = document.getElementById(
-    "listNameFormInputField",
+    "list-name-form-input-field",
   );
-  let listName = document.getElementById("listName");
+  let listName = document.getElementById("list-name");
 
   // update list name
-  listName.innerText = listNameFormInputField.value;
+  listName.textContent = listNameFormInputField.value;
 
   // clear out input field
   listNameFormInputField.value = "";
 } // updateListName
 
 function addToList(event) {
-  // stop page from refreshing
+  // adds an item to the list
+
   event.preventDefault();
 
-  // update global id
   globalId += 1;
 
-  // initialize variables
-  let objFormInputField = document.getElementById("objFormInputField");
-  let theList = document.getElementById("theList");
-  let element = document.createElement("p");
+  let itemFormInputField = document.getElementById("item-form-input-field");
+  let theList = document.getElementById("the-list");
 
   // create element and append to the list
-  element.id = globalId;
-  element.innerHTML = `<form action='index.html' id='obj${element.id}'><label><b>${objFormInputField.value} </b></label><input type='submit' value='Delete' id='objSubmitButton${element.id}'/></form>`;
-  theList.append(element);
+  let item = document.createElement("div");
+  item.id = globalId;
 
-  // create an eventListener for this specific object
-  document
-    .querySelector(`#obj${element.id}`)
-    .addEventListener("submit", (event) => {
-      deleteFromList(event, element.id);
-    });
+  let form = document.createElement("form");
+
+  let label = document.createElement("label");
+  let bold = document.createElement("b");
+  bold.textContent = itemFormInputField.value;
+  label.append(bold);
+
+  let deleteButton = document.createElement("button");
+  deleteButton.type = "submit";
+  deleteButton.textContent = "delete";
+
+  // append elements to form
+  form.append(label);
+  form.append(" ");
+  form.append(deleteButton);
+  item.append(form);
+  item.append(document.createElement("br"));
+  theList.append(item);
+
+  // create an eventListener
+  form.addEventListener("submit", (event) => {
+    deleteFromList(event, item.id);
+  });
 
   // clear out input field
-  objFormInputField.value = "";
+  itemFormInputField.value = "";
 } // addToList
 
 function deleteFromList(event, id) {
-  // stop page from refreshing
+  // deletes an item from the list
+
   event.preventDefault();
 
   // find element based on id and remove it
-  let element = document.getElementById(id);
+  let item = document.getElementById(id);
 
-  // remove the event listener
-  const form = document.getElementById(`obj${id}`);
-  if (form) {
-    form.removeEventListener("submit", deleteFromList);
-  }
-
-  element.remove();
+  // remove the item
+  item.remove();
 } // deleteFromList
 
 function updateBackground(event) {
-  // stop page from refreshing
+  // updates the background color of the page
+
   event.preventDefault();
 
-  // if statement to determine current background color and change accordingly
+  // determine current background color and change accordingly
   if (document.body.style.backgroundColor == "darkblue") {
     document.body.style.backgroundColor = "lightcyan";
   } else {
@@ -83,19 +95,19 @@ function updateBackground(event) {
 } // updateBackground
 
 function main() {
-  // handle events
+  // handles events
 
-  // updates the list title
+  // update the list name
   document
-    .querySelector("#listNameForm")
+    .querySelector("#list-name-form")
     .addEventListener("submit", updateListName);
 
-  // adds an object to the list
-  document.querySelector("#objForm").addEventListener("submit", addToList);
+  // add an item to the list
+  document.querySelector("#item-form").addEventListener("submit", addToList);
 
-  // updates the background
+  // update the background color of the page
   document
-    .querySelector("#backgroundButton")
+    .querySelector("#background-button")
     .addEventListener("click", updateBackground);
 } // main
 

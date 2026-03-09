@@ -1,50 +1,77 @@
 /**
  * logic.js
  *
- * Handles logic for iklafari.mooo.com.
+ * handles logic for iklafari.mooo.com.
  *
- * Author: Christopher Romo
+ * author: christopher romo
  */
 
-// fills the list on index.html
 async function fillList() {
+  // fills the list on index.html.
+
   // fetch all recipients
   const response = await fetch("/api/recipient");
   const mailList = await response.json();
 
   // designate area to append
-  let theList = document.getElementById("theList");
+  let theList = document.getElementById("the-list");
+
+  const existingButtons = theList.querySelectorAll("button");
+  existingButtons.forEach((button) => {
+    button.removeEventListener("click", button._clickHandler);
+  });
+
   theList.innerHTML = "";
 
   // check if list is empty
   if (mailList.length === 0) {
-    let element = document.createElement("p");
-    element.textContent = "no recipients yet...";
-    theList.append(element);
+    let message = document.createElement("p");
+    message.textContent = "no recipients yet...";
+    theList.append(message);
     return;
   }
 
-  // for each recipient of mailList, create an entry on list
+  // create an entry on the list for each recipient of mailList
   mailList.forEach((recipient) => {
-    // initialize variables
-    const { id, name, email } = recipient;
-    let element = document.createElement("p");
+    let recipientCard = document.createElement("div");
+    recipientCard.classList.add("recipient-card");
 
-    // css styling
-    element.style.borderTop = "2px double black";
-    element.style.borderBottom = "2px double black";
-    element.style.textAlign = "center";
+    const nameP = document.createElement("p");
+    nameP.textContent = `name: ${recipient.name}`;
 
-    // innerHTML for each entry
-    element.innerHTML = `<p>name: ${name}</p><p>email: ${email}</p><p>recipient id: ${id}</p><p><button onclick="editRecipient('${id}')">edit</button> <button onclick="deleteRecipient('${id}')">remove</button></p>`;
+    const emailP = document.createElement("p");
+    emailP.textContent = `email: ${recipient.email}`;
+
+    const idP = document.createElement("p");
+    idP.textContent = `recipient id: ${recipient.id}`;
+
+    const editButton = document.createElement("button");
+    editButton.textContent = "edit";
+    editButton.addEventListener("click", () => {
+      editRecipient(recipient.id);
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "remove";
+    deleteButton.addEventListener("click", () => {
+      deleteRecipient(recipient.id);
+    });
+
+    const buttonP = document.createElement("p");
+    buttonP.append(editButton);
+    buttonP.append(" ");
+    buttonP.append(deleteButton);
+
+    recipientCard.append(nameP, emailP, idP, buttonP);
 
     // append element to DOM
-    theList.append(element);
+    theList.append(recipientCard);
   });
-} // fillList()
+} // fillList
 
-// updates a recipient in the mailing list
 async function editRecipient(id) {
+  // updates recipient within the mail list.
+
   // fetch specified user and edit
   const editedName = prompt("edit recipient's name:");
   const editedEmail = prompt("edit recipient's email:");
@@ -67,8 +94,9 @@ async function editRecipient(id) {
   }
 } // editRecipient
 
-// deletes a recipient from the mailing list
 async function deleteRecipient(id) {
+  // removes recipient from the mail list.
+
   // fetch specified recipient and delete
   const response = await fetch(`/api/recipient/${id}`, {
     method: "DELETE",
@@ -86,8 +114,9 @@ async function deleteRecipient(id) {
   }
 } // deleteRecipient
 
-// adds a recipient to the mailing list
 async function addRecipient() {
+  // posts recipient to the mail list.
+
   // specify elements on HTML
   const name = document.getElementById("name");
   const email = document.getElementById("email");
@@ -114,8 +143,9 @@ async function addRecipient() {
   }
 } // addRecipient
 
-// adds an account to the API
 async function addAccount() {
+  // posts account to the account list.
+
   // specify elements on HTML
   const username = document.getElementById("username");
   const password = document.getElementById("password");
@@ -143,5 +173,9 @@ async function addAccount() {
   }
 } // addAccount
 
-// refresh the list on index.html
-setInterval(fillList(), 5000);
+function main() {
+  // calls fillList every 5 seconds to populate the list on index.html.
+  setInterval(fillList, 5000);
+} // main
+
+main();

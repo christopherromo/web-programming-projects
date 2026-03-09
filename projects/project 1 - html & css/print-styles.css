@@ -1,0 +1,35 @@
+.container {
+  display: grid;
+  margin: auto;
+  padding: 10px;
+  place-items: center;
+}
+
+.header {
+  text-align: center;
+}
+
+.image {
+  display: none;
+}
+
+.intro-box {
+  background-color: white;
+  border-color: white;
+  border-style: solid;
+}
+
+.middle-box {
+  background-color: white;
+  border-color: white;
+  border-style: solid;
+}
+
+h3 {
+  border-bottom: 2px solid black;
+  width: 81%;
+}
+
+li {
+  margin-bottom: 10px;
+}

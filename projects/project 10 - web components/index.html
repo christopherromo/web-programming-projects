@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <!-- christopher romo, cs 3110, project 10 -->
+    <title>christopher's server</title>
+    <meta charset="UTF-8" />
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text">christopher's server</h1>
+      <p class="text">welcome to iklafari.mooo.com</p>
+      <p class="text">(now with web components!)</p>
+    </div>
+    <div class="container">
+      <h2 class="text">create your own business card:</h2>
+      <form
+        onsubmit="
+          addBusinessCard();
+          return false;
+        "
+      >
+        <label class="text" for="name">name:</label>
+        <input id="name" name="name" />
+        <p></p>
+        <label class="text" for="email">email:</label>
+        <input id="email" name="email" />
+        <p></p>
+        <button type="submit">create</button>
+      </form>
+    </div>
+    <div class="container">
+      <div class="text-box" id="the-list">
+        <h3><u>your business cards</u></h3>
+        <business-card
+          ><span slot="header">this is an h1 element</span
+          ><span slot="text">this is a p element</span></business-card
+        >
+      </div>
+    </div>
+    <div class="container">
+      <div>
+        <h2 class="text">christopher romo, CS 3110</h2>
+      </div>
+    </div>
+    <script src="logic.js"></script>
+  </body>
+</html>

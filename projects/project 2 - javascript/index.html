@@ -2,41 +2,42 @@
 
 <html lang="en">
   <head>
-    <!-- Christopher Romo, CS 3110, Project 2 -->
+    <!-- christopher romo, cs 3110, project 2 -->
     <title>List Creator</title>
     <meta charset="UTF-8" />
-    <link href="./styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
   </head>
   <body class="page">
-    <div>
-      <img src="./logo.png" class="image" alt="list creator" />
+    <div class="container">
+      <img src="logo.png" class="image" alt="list creator" />
+      <h2 style="color: cyan"><b>create the list of your dreams</b></h2>
     </div>
-    <section class="description">
-      <h3><b>Add anything you want to this magic list!</b></h3>
-    </section>
-    <section class="body">
-      <h3>Fill out these fields to update your list.</h3>
-      <form action="index.html" id="listNameForm">
-        <label><b>List Name: </b></label>
-        <input type="text" id="listNameFormInputField" />
-        <input type="submit" value="Update" id="listNameFormSubmitButton" />
-      </form>
-      <p></p>
-      <form action="index.html" id="objForm">
-        <label><b>Object Name: </b></label>
-        <input type="text" id="objFormInputField" />
-        <input type="submit" value="Add" id="objFormSubmitButton" />
-      </form>
-    </section>
-    <p></p>
-    <section class="body">
-      <h1 id="listName">My List</h1>
-      <div id="theList"></div>
-    </section>
-    <section class="description">
-      <h2><b>Christopher Romo, CS 3110</b></h2>
-      <button id="backgroundButton" type="button">Change Background</button>
-    </section>
-    <script src="./logic.js"></script>
+    <div class="container">
+      <div class="middle-box">
+        <h2>fill out these fields to update your list</h2>
+        <form id="list-name-form">
+          <label><b>list name: </b></label>
+          <input id="list-name-form-input-field" type="text" />
+          <input type="submit" value="update" />
+        </form>
+        <p></p>
+        <form id="item-form">
+          <label><b>item name: </b></label>
+          <input id="item-form-input-field" type="text" />
+          <input type="submit" value="add" />
+        </form>
+      </div>
+    </div>
+    <div class="container">
+      <div class="middle-box">
+        <h2 id="list-name">my list</h2>
+        <div id="the-list"></div>
+      </div>
+    </div>
+    <div class="container">
+      <h2 style="color: cyan"><b>christopher romo, CS 3110</b></h2>
+      <button id="background-button" type="button">change background</button>
+    </div>
+    <script src="logic.js"></script>
   </body>
 </html>

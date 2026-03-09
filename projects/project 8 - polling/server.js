@@ -8,19 +8,20 @@ const url = require("url");
 
 const databaseDirectory = path.join(__dirname, "data");
 
+// create the data directory if it doesn't already exist
 if (!fs.existsSync(databaseDirectory)) {
   fs.mkdirSync(databaseDirectory, { recursive: true });
 }
 
 const databasePath = path.join(databaseDirectory, "database.db");
-
-// create the database and the functions for accessing the recipients and accounts tables
 const database = new sqlite3.Database(databasePath);
 
 let recipients = {};
 let accounts = {};
 
 database.serialize(() => {
+  // creates the tables and the functions for accessing the tables.
+
   // create the recipients table if it doesn't already exist
   database.run(`
     CREATE TABLE IF NOT EXISTS recipients (
@@ -127,19 +128,21 @@ database.serialize(() => {
 // export the database and the functions for accessing the recipients and accounts tables
 module.exports = { database, recipients, accounts };
 
-// create a hash of the password passed in
+// creates a hash of the password passed in.
 const hashPassword = (password) =>
   crypto.createHash("sha256").update(password).digest("hex");
 
-// verify the login
 const verifyLogin = async (username, password) => {
+  // verifies the login.
+
   if (!username || !password) return false;
   const row = await accounts.select(username);
   return row && row.password === hashPassword(password);
 };
 
-// parse the authorization header
 const parseBasicAuthHeader = (req) => {
+  // parses the authorization header.
+
   const header = req.headers.authorization;
   if (!header || !header.startsWith("Basic ")) {
     return null;
@@ -157,8 +160,9 @@ const parseBasicAuthHeader = (req) => {
   return [username, password];
 };
 
-// provide error message stating the user couldn't be authenticated
 const sendUnauthorizedRequest = (res) => {
+  // provides an error message stating the user couldn't be authenticated.
+
   res.writeHead(401, {
     "WWW-Authenticate": 'Basic realm="project8-polling"',
     "Content-Type": "application/json",
@@ -166,8 +170,9 @@ const sendUnauthorizedRequest = (res) => {
   res.end(JSON.stringify({ error: "we couldn't authenticate you." }));
 };
 
-// authenticates user
 const authenticateRequest = async (req, res) => {
+  // authenticates user.
+
   const account = parseBasicAuthHeader(req);
   if (!account) {
     sendUnauthorizedRequest(res);
@@ -185,8 +190,9 @@ const authenticateRequest = async (req, res) => {
   return username;
 };
 
-// handles incoming requests, incoming 'req', and outgoing 'res'
 const handleRequest = async (req, res) => {
+  // handles incoming requests and sends response.
+
   // get the url and the url parts
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -199,7 +205,7 @@ const handleRequest = async (req, res) => {
       pathname.startsWith("/styles") ||
       pathname.endsWith(".html"))
   ) {
-    // static file handling
+    // static file handling.
 
     // find the correct file
     let filePath;
@@ -227,7 +233,6 @@ const handleRequest = async (req, res) => {
         ".html": "text/html",
         ".css": "text/css",
         ".js": "text/javascript",
-        ".json": "application/json",
       };
 
       const contentType = mimeTypes[ext] || "application/octet-stream";
@@ -262,10 +267,14 @@ const handleRequest = async (req, res) => {
     }
 
     if (req.method === "GET") {
+      // gets specific recipient from the mail list.
+
       // return the recipient with the requested id (200 = ok)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(recipient));
     } else if (req.method === "PUT") {
+      // updates recipient within the mail list.
+
       // authenticate the user
       const username = await authenticateRequest(req, res);
       if (!username) return;
@@ -305,11 +314,13 @@ const handleRequest = async (req, res) => {
         }
       });
     } else if (req.method === "DELETE") {
+      // removes recipient from the mail list.
+
       // authenticate the user
       const username = await authenticateRequest(req, res);
       if (!username) return;
 
-      // remove recipient from array
+      // remove recipient from database
       await recipients.delete(id);
 
       // return a message stating the recipient has been removed (200 = ok)
@@ -322,11 +333,15 @@ const handleRequest = async (req, res) => {
     }
   } else if (pathParts[0] === "api" && pathParts[1] === "recipient") {
     if (req.method === "GET") {
+      // gets all recipients from the mail list.
+
       // return all recipients (200 = ok)
       const recipientsList = await recipients.selectAll();
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(recipientsList));
     } else if (req.method === "POST") {
+      // posts recipient to the mail list.
+
       // authenticate the user
       const username = await authenticateRequest(req, res);
       if (!username) return;
@@ -376,10 +391,14 @@ const handleRequest = async (req, res) => {
     }
   } else if (pathParts[0] === "api" && pathParts[1] === "account") {
     if (req.method === "GET") {
+      // denies access to accounts information.
+
       // provide an error message if users try to get an account
       res.writeHead(405, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "not allowed." }));
     } else if (req.method === "POST") {
+      // posts account to the account list.
+
       // save request info to body
       let body = "";
       req.on("data", (data) => {
@@ -435,7 +454,7 @@ const handleRequest = async (req, res) => {
       });
     }
   } else if (pathname === "/api") {
-    // return a general message stating the fields
+    // returns a general message stating the fields.
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
