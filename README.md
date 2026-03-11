@@ -43,7 +43,7 @@ This is a collection of web programming projects from my "Programming the Mobile
    *For projects 4, 5, 6, 7, 8, and 9:* 
       1. Open a terminal in the desired project directory.
       2. Run the following commands:
-      ```bash
-      npm install
-      npm start
-      ```
+         ```bash
+         npm install
+         npm start
+         ```
