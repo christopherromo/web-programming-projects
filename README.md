@@ -17,7 +17,6 @@ This is a collection of web programming projects from my "Programming the Mobile
    - APIs
    - nginx
    - Linode
-   - Certbot
 
 ## Features 📄
 
@@ -47,3 +46,4 @@ This is a collection of web programming projects from my "Programming the Mobile
          npm install
          npm start
          ```
+      3. Access the project at `http://localhost:3000`.
