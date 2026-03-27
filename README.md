@@ -50,3 +50,9 @@ This is a collection of web programming projects from my "Programming the Mobile
          npm start
          ```
       4. Access the project at `http://localhost:3000`.
+
+## Quick Look 🎥
+
+<p align="center">
+  <img src="./resources/web-programming-projects-quick-look.gif" alt="Web Programming Projects Quick Look"/>
+</p>
